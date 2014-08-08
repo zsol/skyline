@@ -1,6 +1,5 @@
 import logging
 from Queue import Empty
-from redis import StrictRedis
 from time import time, sleep
 from threading import Thread
 from collections import defaultdict
@@ -16,6 +15,7 @@ import settings
 from alerters import trigger_alert
 from algorithms import run_selected_algorithm
 from algorithm_exceptions import *
+from utils import redis_conn
 
 logger = logging.getLogger("AnalyzerLog")
 
@@ -26,7 +26,7 @@ class Analyzer(Thread):
         Initialize the Analyzer
         """
         super(Analyzer, self).__init__()
-        self.redis_conn = StrictRedis(unix_socket_path = settings.REDIS_SOCKET_PATH)
+        self.redis_conn = redis_conn()
         self.daemon = True
         self.parent_pid = parent_pid
         self.current_pid = getpid()
@@ -138,7 +138,7 @@ class Analyzer(Thread):
             except:
                 logger.error('skyline can\'t connect to redis at socket path %s' % settings.REDIS_SOCKET_PATH)
                 sleep(10)
-                self.redis_conn = StrictRedis(unix_socket_path = settings.REDIS_SOCKET_PATH)
+                self.redis_conn = redis_conn()
                 continue
 
             # Discover unique metrics

@@ -1,10 +1,11 @@
 from os import kill
-from redis import StrictRedis, WatchError
+from redis import WatchError
 from multiprocessing import Process
 from threading import Thread
 from msgpack import Unpacker, packb
 from types import TupleType
 from time import time, sleep
+from utils import redis_conn
 
 import logging
 import settings
@@ -18,7 +19,7 @@ class Roomba(Thread):
     """
     def __init__(self, parent_pid, skip_mini):
         super(Roomba, self).__init__()
-        self.redis_conn = StrictRedis(unix_socket_path = settings.REDIS_SOCKET_PATH)
+        self.redis_conn = redis_conn()
         self.daemon = True
         self.parent_pid = parent_pid
         self.skip_mini = skip_mini
@@ -160,7 +161,7 @@ class Roomba(Thread):
             except:
                 logger.error('roomba can\'t connect to redis at socket path %s' % settings.REDIS_SOCKET_PATH)
                 sleep(10)
-                self.redis_conn = StrictRedis(unix_socket_path = settings.REDIS_SOCKET_PATH)
+                self.redis_conn = redis_conn()
                 continue
 
             # Spawn processes
