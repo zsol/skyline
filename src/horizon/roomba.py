@@ -5,7 +5,7 @@ from threading import Thread
 from msgpack import Unpacker, packb
 from types import TupleType
 from time import time, sleep
-from utils import redis_conn
+from utils import redis_conn, redis_conn_string
 
 import logging
 import settings
@@ -159,7 +159,7 @@ class Roomba(Thread):
             try:
                 self.redis_conn.ping()
             except:
-                logger.error('roomba can\'t connect to redis at socket path %s' % settings.REDIS_SOCKET_PATH)
+                logger.error('roomba can\'t connect to redis at socket path %s' % redis_conn_string())
                 sleep(10)
                 self.redis_conn = redis_conn()
                 continue

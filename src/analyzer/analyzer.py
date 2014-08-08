@@ -15,7 +15,7 @@ import settings
 from alerters import trigger_alert
 from algorithms import run_selected_algorithm
 from algorithm_exceptions import *
-from utils import redis_conn
+from utils import redis_conn, redis_conn_string
 
 logger = logging.getLogger("AnalyzerLog")
 
@@ -136,7 +136,7 @@ class Analyzer(Thread):
             try:
                 self.redis_conn.ping()
             except:
-                logger.error('skyline can\'t connect to redis at socket path %s' % settings.REDIS_SOCKET_PATH)
+                logger.error('skyline can\'t connect to redis at socket path %s' % redis_conn_string())
                 sleep(10)
                 self.redis_conn = redis_conn()
                 continue
