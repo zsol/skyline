@@ -2,6 +2,14 @@ from redis import StrictRedis
 
 import settings
 
+
+def redis_conn_string():
+    if settings.REDIS_HOST_PORT is None:
+        return settings.REDIS_SOCKET_PATH
+    else:
+        return settings.REDIS_HOST_PORT
+
+
 def redis_conn():
     if settings.REDIS_HOST_PORT is not None:
         (host, port) = settings.REDIS_HOST_PORT

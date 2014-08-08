@@ -6,7 +6,7 @@ import traceback
 import logging
 from time import time
 from msgpack import unpackb, packb
-from redis import StrictRedis
+import utils
 
 from settings import (
     ALGORITHMS,
@@ -15,7 +15,6 @@ from settings import (
     MAX_TOLERABLE_BOREDOM,
     MIN_TOLERABLE_LENGTH,
     STALE_PERIOD,
-    REDIS_SOCKET_PATH,
     ENABLE_SECOND_ORDER,
     BOREDOM_SET_SIZE,
 )
@@ -23,7 +22,7 @@ from settings import (
 from algorithm_exceptions import *
 
 logger = logging.getLogger("AnalyzerLog")
-redis_conn = StrictRedis(unix_socket_path=REDIS_SOCKET_PATH)
+redis_conn = utils.redis_conn()
 
 """
 This is no man's land. Do anything you want in here,

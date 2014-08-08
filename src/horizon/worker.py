@@ -4,7 +4,7 @@ from multiprocessing import Process
 from Queue import Empty
 from msgpack import packb
 from time import time, sleep
-from utils import redis_conn
+from utils import redis_conn, redis_conn_string
 
 import logging
 import socket
@@ -75,7 +75,7 @@ class Worker(Process):
             try:
                 self.redis_conn.ping()
             except:
-                logger.error('worker can\'t connect to redis at socket path %s' % settings.REDIS_SOCKET_PATH)
+                logger.error('worker can\'t connect to redis at socket path %s' % redis_conn_string())
                 sleep(10)
                 self.redis_conn = redis_conn()
                 pipe = self.redis_conn.pipeline()
