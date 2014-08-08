@@ -1,4 +1,3 @@
-import redis
 import logging
 import simplejson as json
 import sys
@@ -7,11 +6,13 @@ from flask import Flask, request, render_template
 from daemon import runner
 from os.path import dirname, abspath
 
+from utils import redis_conn
+
 # add the shared settings file to namespace
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 import settings
 
-REDIS_CONN = redis.StrictRedis(unix_socket_path=settings.REDIS_SOCKET_PATH)
+REDIS_CONN = redis_conn()
 
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True

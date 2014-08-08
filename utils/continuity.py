@@ -1,9 +1,9 @@
-import redis
 import msgpack
 import sys
 import time
 from os.path import dirname, abspath
 
+from utils import redis_conn
 # add the shared settings file to namespace
 sys.path.insert(0, ''.join((dirname(dirname(abspath(__file__))), "/src")))
 import settings
@@ -12,7 +12,7 @@ metric = 'horizon.test.udp'
 
 
 def check_continuity(metric, mini = False):
-    r = redis.StrictRedis(unix_socket_path=settings.REDIS_SOCKET_PATH)
+    r = redis_conn()
     if mini:
         raw_series = r.get(settings.MINI_NAMESPACE + metric)
     else:
